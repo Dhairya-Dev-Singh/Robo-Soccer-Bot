@@ -266,3 +266,7 @@ A physical kill switch, suitable fuse protection, a Li-Po-safe enclosure, and pr
 This repository is also a record of the build process. The wiring, code, mistakes, fixes, and design decisions are being documented as we turn individual parts into a working robot.
 
 The final result should be a robot that is fun to drive, safe to test, and easy for someone else to understand and reproduce.
+
+
+## Working demo video link :
+link : https://youtube.com/shorts/lHsHTyMbImI
