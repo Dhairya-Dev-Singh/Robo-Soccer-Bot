@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07090d" />
+    <title>Yugaantar // Robo Soccer Control</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="scanlines"></div>
+    <div class="noise"></div>
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand-lockup">
+          <div class="brand-mark"><span>Y</span></div>
+          <div>
+            <div class="eyebrow">YUGAANTAR 2026 <span class="slash">//</span> LAB CONTROL</div>
+            <h1>ROBO SOCCER <em>CONTROL</em></h1>
+          </div>
+        </div>
+        <div class="top-actions">
+          <div class="live-pill"><span class="status-dot"></span><span id="connectionLabel">DEMO LINK</span></div>
+          <button class="icon-button" id="settingsButton" aria-label="Open connection settings">⚙</button>
+          <button class="stop-button top-stop" id="topStop"><span>■</span> EMERGENCY STOP</button>
+        </div>
+      </header>
+
+      <section class="command-bar">
+        <div class="mode-select">
+          <span class="field-label">CONTROL SOURCE</span>
+          <button class="mode-button active" data-mode="demo" id="demoModeButton"><span class="mode-dot"></span> DEMO MODE</button>
+          <button class="mode-button" data-mode="live" id="liveModeButton"><span class="mode-dot"></span> LIVE MODE</button>
+        </div>
+        <div class="bar-divider"></div>
+        <div class="mini-stat"><span>ESP32 LINK</span><strong id="espStatus">STANDBY</strong></div>
+        <div class="mini-stat"><span>LATENCY</span><strong id="latency">-- ms</strong></div>
+        <div class="mini-stat"><span>FAILSAFE</span><strong class="good">ARMED</strong></div>
+        <div class="mini-stat battery-stat"><span>BATTERY</span><strong><i class="battery-icon"><b></b></i><span id="batteryValue">78%</span></strong></div>
+        <button class="arm-button" id="armButton"><span class="arm-light"></span><span id="armText">ARM DRIVE</span></button>
+      </section>
+
+      <section class="hero-grid">
+        <article class="panel status-panel">
+          <div class="panel-heading"><div><span class="section-kicker">01 / SYSTEM STATUS</span><h2>ROBOT <span>READY</span></h2></div><span class="panel-index">SYS.01</span></div>
+          <div class="status-display"><div class="ready-ring"><div class="ring-core"><span class="pulse-dot"></span><strong id="robotStatus">READY</strong><small>DRIVE SYSTEM</small></div></div><div class="status-copy"><p>Nominal conditions detected across the drive bus.</p><div class="status-line"><span class="tiny-dot cyan"></span><span>ESP32 CONTROL CORE</span><b id="coreStatus">ONLINE</b></div><div class="status-line"><span class="tiny-dot purple"></span><span>MOTOR BUS</span><b>STANDBY</b></div><div class="status-line"><span class="tiny-dot yellow"></span><span>RC FALLBACK</span><b>READY</b></div></div></div>
+          <div class="status-footer"><span>LAST COMMAND <b id="lastCommand">--:--:--</b></span><span>UPTIME <b id="uptime">00:00:00</b></span></div>
+        </article>
+
+        <article class="panel telemetry-panel">
+          <div class="panel-heading"><div><span class="section-kicker">02 / TELEMETRY</span><h2>LIVE <span>SIGNALS</span></h2></div><span class="panel-index">TEL.02</span></div>
+          <div class="telemetry-grid">
+            <div class="telemetry-cell"><span>VOLTAGE</span><strong id="voltage">11.64 <small>V</small></strong><div class="sparkline cyan-line"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+            <div class="telemetry-cell"><span>CURRENT EST.</span><strong id="current">0.42 <small>A</small></strong><div class="sparkline purple-line"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+            <div class="telemetry-cell"><span>SIGNAL QUALITY</span><strong id="signal">98 <small>%</small></strong><div class="signal-bars"><i></i><i></i><i></i><i></i><i></i></div></div>
+            <div class="telemetry-cell"><span>COMMAND RATE</span><strong>50 <small>Hz</small></strong><div class="mini-wave"></div></div>
+          </div>
+        </article>
+
+        <article class="panel score-panel">
+          <div class="panel-heading"><div><span class="section-kicker">03 / MATCH MODE</span><h2>FIELD <span>OPS</span></h2></div><span class="panel-index">OPS.03</span></div>
+          <div class="match-top"><span class="match-state" id="matchState">PRE-MATCH</span><span class="timer-label">MATCH TIMER</span></div>
+          <div class="match-timer" id="matchTimer">05:00</div>
+          <div class="score-row"><div><small>YUGAANTAR BOT</small><strong id="ourScore">00</strong></div><span>:</span><div class="opponent"><small>OPPONENT</small><strong id="opponentScore">00</strong></div></div>
+          <div class="match-actions"><button class="small-button primary" id="matchToggle">START MATCH</button><button class="small-button" id="matchReset">RESET</button></div>
+        </article>
+      </section>
+
+      <section class="main-grid">
+        <article class="panel drive-panel">
+          <div class="panel-heading"><div><span class="section-kicker">04 / PILOT CONSOLE</span><h2>DRIVE <span>COMMAND</span></h2></div><span class="key-hint">W A S D / SPACE</span></div>
+          <div class="drive-console">
+            <div class="quick-controls"><button data-command="forward">▲<span>FORWARD</span></button><div><button data-command="left">◀<span>ROTATE LEFT</span></button><button data-command="stop" class="quick-stop">■<span>STOP</span></button><button data-command="right">▶<span>ROTATE RIGHT</span></button></div><button data-command="reverse">▼<span>REVERSE</span></button></div>
+            <div class="joystick-zone"><div class="joystick" id="joystick"><div class="joystick-grid"></div><div class="joystick-ring"></div><div class="joystick-knob" id="joystickKnob"><span></span></div><label>THROTTLE <b id="throttleReadout">000</b></label><label class="steering-label">STEERING <b id="steeringReadout">000</b></label></div><div class="joystick-caption"><span><i class="arrow-key">↑</i> THROTTLE</span><span><i class="arrow-key">←</i> STEERING</span><span class="muted">RELEASE = STOP</span></div></div>
+          </div>
+          <div class="drive-footer"><div class="speed-control"><div class="control-title"><span>OUTPUT LIMIT</span><b id="speedValue">100%</b></div><input type="range" id="speedSlider" min="10" max="100" value="100" /></div><div class="drive-state"><span class="tiny-dot green"></span><span id="driveState">DISARMED / SAFE</span></div></div>
+        </article>
+
+        <article class="panel robot-panel">
+          <div class="panel-heading"><div><span class="section-kicker">05 / VEHICLE MAP</span><h2>BOT <span>OVERVIEW</span></h2></div><span class="panel-index">BOT.05</span></div>
+          <div class="robot-stage"><div class="stage-grid"></div><div class="robot-body" id="robotBody"><div class="robot-front"><span>FRONT / BALL GUIDE</span></div><div class="robot-deck"><div class="deck-line"></div><span>ESP32</span><b>Y-01</b></div><div class="wheel wheel-fl"><i></i></div><div class="wheel wheel-fr"><i></i></div><div class="wheel wheel-bl"><i></i></div><div class="wheel wheel-br"><i></i></div></div><div class="direction-label">FIELD HEADING <b id="heading">NORTH / 000°</b></div></div>
+          <div class="motor-cards"><div class="motor-card"><div class="motor-card-title"><span class="tiny-dot cyan"></span><span>LEFT MOTOR GROUP</span><b id="leftPercent">0%</b></div><div class="motor-bar"><i id="leftBar"></i></div><div class="motor-meta"><span>DIR <b id="leftDir">IDLE</b></span><span>PWM <b id="leftPwm">000</b></span></div></div><div class="motor-card"><div class="motor-card-title"><span class="tiny-dot purple"></span><span>RIGHT MOTOR GROUP</span><b id="rightPercent">0%</b></div><div class="motor-bar purple-bar"><i id="rightBar"></i></div><div class="motor-meta"><span>DIR <b id="rightDir">IDLE</b></span><span>PWM <b id="rightPwm">000</b></span></div></div></div>
+        </article>
+      </section>
+
+      <section class="bottom-grid">
+        <article class="panel log-panel"><div class="panel-heading"><div><span class="section-kicker">06 / EVENT STREAM</span><h2>SYSTEM <span>LOG</span></h2></div><button class="clear-button" id="clearLog">CLEAR</button></div><div class="event-log" id="eventLog"></div></article>
+        <article class="panel config-panel"><div class="panel-heading"><div><span class="section-kicker">07 / CONTROL PROFILE</span><h2>PIN <span>MAP</span></h2></div><span class="panel-index">CFG.07</span></div><div class="pin-map"><div><span>LEFT BTS7960</span><b>RPWM 25</b><b>LPWM 26</b><b>EN 33</b></div><div><span>RIGHT BTS7960</span><b>RPWM 27</b><b>LPWM 14</b><b>EN 32</b></div><div><span>FLYSKY RX</span><b>CH1 34</b><b>CH2 35</b><b>3S / 11.1V</b></div></div><div class="config-note"><span>i</span><p>Live control is locked behind the ARM DRIVE gate. A physical kill switch is recommended for hardware testing.</p></div></article>
+      </section>
+
+      <footer class="footer"><span>YUGAANTAR // ROBO SOCCER BOT <b>v0.1.0</b></span><span>BUILT FOR THE DEVLOG <i>●</i></span></footer>
+    </main>
+
+    <div class="toast-stack" id="toastStack"></div>
+    <div class="modal-backdrop hidden" id="settingsModal"><div class="modal"><button class="modal-close" id="closeModal">×</button><span class="section-kicker">CONTROL CONFIGURATION</span><h2>CONNECTION <span>SETTINGS</span></h2><label class="modal-label">ESP32 URL<input id="espUrl" value="http://192.168.4.1" /></label><label class="modal-label">LIVE API MODE<select id="apiMode"><option value="mock">Mock / Demo only</option><option value="http">HTTP REST bridge</option></select></label><div class="modal-actions"><button class="small-button" id="testConnection">TEST LINK</button><button class="small-button primary" id="saveSettings">SAVE SETTINGS</button></div><p class="modal-footnote">Demo Mode runs entirely in this browser. Live Mode expects the ESP32 bridge to accept <code>POST /api/drive</code> with left/right values from -255 to 255.</p></div></div>
+    <script src="./app.js"></script>
+  </body>
+</html>
