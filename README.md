@@ -1,9 +1,9 @@
 # Robo-Soccer-Bot
 
 
-## Controller One
+## Controller
 
-Controller One is our first working control system for the Robo Soccer Bot that we are building for **Yugaantar 2026**.
+Controller is our first working control system for the Robo Soccer Bot that we built.
 
 The project started as a simple motor-and-controller test. It has now grown into a four-wheel drive robot with wireless control, two BTS7960 motor drivers, an ESP32 control board, a three-gear system, and a browser dashboard for our devlog.
 
